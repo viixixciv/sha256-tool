@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHA‑256 & HMAC Tool</title>
+    <title>SHA-256 & HMAC-SHA256 Tool</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js">
     </script>
     <style>
@@ -336,17 +336,17 @@
     <div class="card">
         <h1>🔐 SHA‑256 & HMAC</h1>
         <p class="subtitle">
-            Tool to compute SHA‑256 and HMAC‑SHA256 hashes for multiple inputs at once. Each line is treated as a separate data item.
-            Supports various input encodings: <strong>UTF‑8</strong>, <strong>UTF‑16</strong>, <strong>Hex</strong>, and <strong>Base64</strong>.
+            Compute SHA-256 and HMAC-SHA256 hashes for multiple inputs in a single operation. Each line is processed independently as a separate input.
+            Supports <strong>UTF‑8</strong>, <strong>UTF‑16</strong>, <strong>Hex</strong>, and <strong>Base64</strong> input encodings.
         </p>
         <!-- SHA‑256 SECTION -->
-        <label for="inputText">📝 Enter data <span class="badge">one per line</span></label>
+        <label for="inputText">📝 Input messages <span class="badge">one per line</span></label>
         <div class="textarea-wrapper">
-            <textarea id="inputText" placeholder="Type your data here…"></textarea>
+            <textarea id="inputText" placeholder="Enter one or more inputs..."></textarea>
             <button class="clear-btn-inside" id="clearDataBtn" title="Clear data">🗑</button>
         </div>
         <div class="info-box">
-            💡 <strong>Each line</strong> is processed as one data item. Empty lines, spaces, and tabs are included.
+            💡 <strong>Each line</strong> is processed as one data item. Empty lines and all whitespace (including spaces and tabs) are processed as-is.
             SHA‑256 hash updates automatically as you type.
         </div>
         <div class="row-select">
@@ -370,35 +370,34 @@
                     <option value="base64">Base64</option>
                 </select>
                 <div class="info-box" style="margin-top:4px;">
-                    🎯 Output format for hash / HMAC.
+                    🎯 Select the output format for hashes and HMACs.
                 </div>
             </div>
         </div>
         <div class="output-area" id="hashOutputArea">
             <button class="copy-btn" id="copyHashBtn">📋 Copy</button>
-            <pre id="hashOutput">(SHA‑256 hash will appear here)</pre>
+            <pre id="hashOutput">SHA-256 hashes will appear here.</pre>
         </div>
         <!-- HMAC SECTION -->
         <div class="hmac-section">
             <h3>🔑 HMAC‑SHA256</h3>
-            <label for="hmacKey">🔐 Secret key <span class="badge">one per line or one for all</span></label>
+            <label for="hmacKey">🔐 Secret key <span class="badge">one per line or shared key</span></label>
             <div class="textarea-wrapper">
-                <textarea id="hmacKey" placeholder="Enter your key here…"></textarea>
+                <textarea id="hmacKey" placeholder="Enter one or more secret keys..."></textarea>
                 <button class="clear-btn-inside" id="clearKeyBtn" title="Clear key">🗑</button>
             </div>
             <div class="info-box">
-                💡 If number of key lines equals data lines, they are paired per line.
-                If only <strong>1 line</strong>, that key is used for all data. Empty line = empty key.
-                HMAC updates automatically.
+                💡 If the number of key lines matches the number of data lines, each key is paired with the corresponding input.
+                If only <strong>one key</strong> is provided, it is used for all inputs. Empty lines are treated as empty keys. HMAC updates automatically.
             </div>
             <button class="btn" id="hmacBtn" style="display:none;">🔹 Compute HMAC‑SHA256 (manual)</button>
             <div class="output-area" id="hmacOutputArea">
                 <button class="copy-btn" id="copyHmacBtn">📋 Copy</button>
-                <pre id="hmacOutput">(HMAC will appear here)</pre>
+                <pre id="hmacOutput">HMAC-SHA256 values will appear here.</pre>
             </div>
         </div>
         <div class="footer">
-            ⚡ All processing is done client‑side using <strong>CryptoJS</strong> — your data is never sent to the server.
+            ⚡ All processing happens locally in your browser using <strong>CryptoJS.</strong> No data is ever sent to a server.
         </div>
     </div>
     <script>
