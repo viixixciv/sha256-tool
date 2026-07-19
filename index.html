@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHA-256 & HMAC-SHA256 TOOL</title>
+    <title>SHA-256 & HMAC-SHA256 Generator (Free Online Tool)</title>
+    <!-- Favicon Logo -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔐</text></svg>">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js" 
         integrity="sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==" 
@@ -122,10 +123,6 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
         .btn {
             background: #3498db;
             color: white;
@@ -142,25 +139,26 @@
             background: #2980b9;
             transform: scale(1.02);
         }
+        /* Output Area */
         .output-area {
             margin-top: 16px;
             border: 1px solid #e0e6ed;
             border-radius: 8px;
-            background: #f8f9fc;
-            padding: 12px 16px;
+            background: white;
             position: relative;
             transition: background 0.3s, border-color 0.3s;
         }
         .output-area pre {
             margin: 0;
-            white-space: pre-wrap;
-            word-break: break-all;
-            font-family: 'Consolas', monospace;
-            font-size: 13px;
+            white-space: pre; 
+            word-break: normal;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 22px; 
             max-height: 300px;
-            overflow-y: auto;
+            overflow: auto;
             background: transparent;
-            padding: 4px 0;
+            padding: 12px 70px 12px 64px;
         }
         .output-area .copy-btn {
             position: absolute;
@@ -237,11 +235,55 @@
         .row-select > div {
             flex: 1 1 200px;
         }
+        /* ===== LINE NUMBER CSS ===== */
         .textarea-wrapper {
             position: relative;
+            border: 1px solid #dce1e8;
+            border-radius: 8px;
+            background: white;
+            transition: 0.2s;
+        }
+        .textarea-wrapper:focus-within {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        .line-numbers {
+            position: absolute; 
+            top: 0;
+            left: 0;
+            bottom: 0; 
+            width: 55px;
+            padding: 12px 8px 12px 4px;
+            background: #f8f9fc;
+            border-right: 1px solid #dce1e8;
+            text-align: right;
+            color: #95a5a6;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 22px; 
+            user-select: none;
+            overflow: hidden; 
+            white-space: pre; 
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            z-index: 1; 
         }
         .textarea-wrapper textarea {
-            padding-right: 40px;
+            width: 100%;
+            display: block;
+            min-height: 100px;
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 8px;
+            padding: 12px 40px 12px 64px; 
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 22px; 
+            resize: vertical;
+            white-space: pre; 
+            overflow-wrap: normal;
+            overflow-x: auto;
+            background: transparent;
         }
         .clear-btn-inside {
             position: absolute;
@@ -306,7 +348,6 @@
         body.dark-mode .key-encoding-label {
             color: #cbd5e0;
         }
-        body.dark-mode textarea,
         body.dark-mode input[type="text"],
         body.dark-mode select {
             background: #2d3748;
@@ -314,8 +355,8 @@
             color: #f7fafc;
         }
         body.dark-mode .output-area {
-            background: #171923;
-            border-color: #2d3748;
+            background: #2d3748;
+            border-color: #4a5568;
         }
         body.dark-mode .info-box {
             background: #1a365d;
@@ -344,62 +385,41 @@
         body.dark-mode .upload-btn:hover {
             background: #2d3748;
         }
+        body.dark-mode .textarea-wrapper {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+        body.dark-mode .textarea-wrapper textarea,
+        body.dark-mode .output-area pre {
+            color: #f7fafc;
+        }
+        body.dark-mode .line-numbers {
+            background: #1a202c;
+            border-color: #4a5568;
+            color: #718096;
+        }
         @media (max-width: 700px) {
-            body {
-                margin: 10px auto;
-                padding: 10px;
-            }
-            .card {
-                padding: 20px;
-            }
-            h1 {
-                font-size: 24px;
-            }
-            .subtitle {
-                font-size: 14px;
-            }
-            .row-select {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .row-select > div {
-                flex: 1 1 100%;
-                width: 100%;
-            }
-            .output-area pre {
-                font-size: 12px;
-                max-height: 200px;
-            }
-            .hmac-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            .key-encoding-wrapper {
-                width: 100%;
-                justify-content: flex-start;
-            }
-            .input-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
+            body { margin: 10px auto; padding: 10px; }
+            .card { padding: 20px; }
+            h1 { font-size: 24px; }
+            .subtitle { font-size: 14px; }
+            .row-select { flex-direction: column; gap: 10px; }
+            .row-select > div { flex: 1 1 100%; width: 100%; }
+            .output-area pre { font-size: 12px; max-height: 200px; }
+            .hmac-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .key-encoding-wrapper { width: 100%; justify-content: flex-start; }
+            .input-header { flex-direction: column; align-items: flex-start; gap: 8px; }
         }
         @media (max-width: 480px) {
-            .card {
-                padding: 14px;
-                border-radius: 12px;
-            }
-            h1 {
-                font-size: 20px;
-            }
+            .card { padding: 14px; border-radius: 12px; }
+            h1 { font-size: 20px; }
         }
     </style>
 </head>
 <body>
     <div class="card">
         <div class="header-container">
-            <h1>🔐 SHA‑256 & HMAC</h1>
+            <h1>🔐 SHA‑256 & HMAC Generator</h1>
             <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Theme">🌙</button>
         </div>
         <p class="subtitle">
@@ -413,6 +433,7 @@
             <button class="upload-btn" id="uploadBtn" aria-label="Upload Text File" title="Upload a text file">📂 Upload File</button>
         </div>
         <div class="textarea-wrapper">
+            <div class="line-numbers" id="inputLineNumbers">1</div>
             <textarea id="inputText" placeholder="Enter one or more inputs..."></textarea>
             <button class="clear-btn-inside" id="clearDataBtn" title="Clear data" aria-label="Clear all input messages">🗑</button>
         </div>
@@ -447,6 +468,7 @@
             </div>
         </div>
         <div class="output-area" id="hashOutputArea">
+            <div class="line-numbers" id="hashLineNumbers">1</div>
             <button class="copy-btn" id="copyHashBtn" aria-label="Copy SHA-256 results">📋 Copy</button>
             <pre id="hashOutput">SHA-256 hashes will appear here.</pre>
         </div>
@@ -467,6 +489,7 @@
                 </div>
             </div>
             <div class="textarea-wrapper">
+                <div class="line-numbers" id="keyLineNumbers">1</div>
                 <textarea id="hmacKey" placeholder="Enter one or more secret keys..."></textarea>
                 <button class="clear-btn-inside" id="clearKeyBtn" title="Clear key" aria-label="Clear secret key">🗑</button>
             </div>
@@ -475,6 +498,7 @@
                 If only <strong>one key</strong> is provided, it is used for all inputs. Empty lines are treated as empty keys. HMAC updates automatically.
             </div>
             <div class="output-area" id="hmacOutputArea">
+                <div class="line-numbers" id="hmacLineNumbers">1</div>
                 <button class="copy-btn" id="copyHmacBtn" aria-label="Copy HMAC results">📋 Copy</button>
                 <pre id="hmacOutput">HMAC-SHA256 values will appear here.</pre>
             </div>
@@ -506,7 +530,7 @@
                     localStorage.setItem('theme', 'light');
                 }
             });
-            // ===== Existing Tool Logic =====
+            // ===== Variables =====
             const inputText = document.getElementById('inputText');
             const encodingSelect = document.getElementById('encodingSelect');
             const outputEncodingSelect = document.getElementById('outputEncodingSelect');
@@ -518,6 +542,10 @@
             const clearKeyBtn = document.getElementById('clearKeyBtn');
             const fileInput = document.getElementById('fileInput');
             const uploadBtn = document.getElementById('uploadBtn');
+            const inputLineNumbers = document.getElementById('inputLineNumbers');
+            const keyLineNumbers = document.getElementById('keyLineNumbers');
+            const hashLineNumbers = document.getElementById('hashLineNumbers');
+            const hmacLineNumbers = document.getElementById('hmacLineNumbers');
             // ===== File Upload Logic =====
             uploadBtn.addEventListener('click', () => {
                 fileInput.click();
@@ -528,10 +556,10 @@
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     inputText.value = event.target.result;
+                    updateLineNumbers(inputText, inputLineNumbers);
                     autoUpdate();
                     fileInput.value = '';
                 };
-                // Reading the file as text for line-by-line processing
                 reader.readAsText(file);
             });
             function parseData(raw, encoding) {
@@ -563,6 +591,8 @@
                 const lines = getDataLines();
                 if (lines.length === 0 || inputText.value.length === 0) {
                     hashOutput.textContent = '(No data)';
+                    hashOutput.removeAttribute('data-raw');
+                    hashLineNumbers.textContent = '1';
                     return;
                 }
                 const inputEnc = encodingSelect.value;
@@ -572,7 +602,7 @@
                 for (let i = 0; i < lines.length; i++) {
                     const word = parseData(lines[i], inputEnc);
                     if (word === null) {
-                        results.push(`[ERROR] Line ${i+1}: invalid format`);
+                        results.push(`[ERROR] invalid format`);
                         errors++;
                         continue;
                     }
@@ -580,17 +610,24 @@
                     results.push(formatHash(hash, outputEnc));
                 }
                 if (errors) results.unshift(`⚠️ ${errors} line(s) failed to process.`);
-                hashOutput.textContent = results.join('\n');
+                const finalStr = results.join('\n');
+                hashOutput.textContent = finalStr;
+                hashOutput.dataset.raw = finalStr;
+                hashLineNumbers.textContent = Array.from({ length: results.length }, (_, i) => i + 1).join('\n');
             }
             function computeHMAC() {
                 const dataLines = getDataLines();
                 const keyLines = getKeyLines();
                 if (dataLines.length === 0 || inputText.value.length === 0) {
                     hmacOutput.textContent = '(No data)';
+                    hmacOutput.removeAttribute('data-raw');
+                    hmacLineNumbers.textContent = '1';
                     return;
                 }
                 if (keyLines.length === 0 || hmacKey.value.length === 0) {
                     hmacOutput.textContent = '(Key cannot be empty)';
+                    hmacOutput.removeAttribute('data-raw');
+                    hmacLineNumbers.textContent = '1';
                     return;
                 }
                 const inputEnc = encodingSelect.value;
@@ -600,9 +637,9 @@
                 if (keyLines.length === 1) {
                     keys = Array(dataLines.length).fill(keyLines[0]);
                 } else if (keyLines.length !== dataLines.length) {
-                    hmacOutput.textContent =
-                        `Number of keys (${keyLines.length}) does not match number of data lines (${dataLines.length}).\n` +
-                        `Use 1 key for all, or equal number of lines.`;
+                    hmacOutput.textContent = `Number of keys (${keyLines.length}) does not match number of data lines (${dataLines.length}).\nUse 1 key for all, or equal number of lines.`;
+                    hmacOutput.removeAttribute('data-raw');
+                    hmacLineNumbers.textContent = '1\n2';
                     return;
                 }
                 const results = [];
@@ -610,13 +647,13 @@
                 for (let i = 0; i < dataLines.length; i++) {
                     const dataWord = parseData(dataLines[i], inputEnc);
                     if (dataWord === null) {
-                        results.push(`[ERROR] Data line ${i+1}: invalid format`);
+                        results.push(`[ERROR] Data line invalid format`);
                         errors++;
                         continue;
                     }
                     const keyWord = parseData(keys[i], keyEnc);
                     if (keyWord === null) {
-                        results.push(`[ERROR] Key line ${i+1}: invalid format`);
+                        results.push(`[ERROR] Key line invalid format`);
                         errors++;
                         continue;
                     }
@@ -624,20 +661,29 @@
                     results.push(formatHash(hmac, outputEnc));
                 }
                 if (errors) results.unshift(`⚠️ ${errors} line(s) failed to process.`);
-                hmacOutput.textContent = results.join('\n');
+                const finalStr = results.join('\n');
+                hmacOutput.textContent = finalStr;
+                hmacOutput.dataset.raw = finalStr;
+                hmacLineNumbers.textContent = Array.from({ length: results.length }, (_, i) => i + 1).join('\n');
             }
             function autoUpdate() {
                 if (inputText.value.length > 0) {
                     computeSHA256();
                 } else {
                     hashOutput.textContent = '(No data)';
+                    hashOutput.removeAttribute('data-raw');
+                    hashLineNumbers.textContent = '1';
                 }
                 if (inputText.value.length > 0 && hmacKey.value.length > 0) {
                     computeHMAC();
                 } else if (inputText.value.length === 0) {
                     hmacOutput.textContent = '(No data)';
+                    hmacOutput.removeAttribute('data-raw');
+                    hmacLineNumbers.textContent = '1';
                 } else {
                     hmacOutput.textContent = '(Key cannot be empty)';
+                    hmacOutput.removeAttribute('data-raw');
+                    hmacLineNumbers.textContent = '1';
                 }
             }
             function debounce(func, wait) {
@@ -648,56 +694,129 @@
                 };
             }
             const debouncedUpdate = debounce(autoUpdate, 250);
-            function handleCopy(button, textToCopy) {
+            // ===== SMART COPY & DOWNLOAD LOGIC =====
+            function handleCopy(button, textToCopy, type) {
                 if (!textToCopy || textToCopy.startsWith('(No') || textToCopy.startsWith('(SHA') || textToCopy.startsWith('(HMAC') || textToCopy.startsWith('(Key')) {
                     button.classList.add('error');
                     button.textContent = '⚠️ No data';
                     setTimeout(() => { button.classList.remove('error'); button.textContent = '📋 Copy'; }, 1200);
                     return;
                 }
+                function triggerUI(status, msg) {
+                    button.classList.add(status);
+                    button.textContent = msg;
+                    setTimeout(() => { button.classList.remove(status); button.textContent = '📋 Copy'; }, 2000);
+                }
+                // Download function if copying fails (Bypasses clipboard RAM limitations)
+                function downloadFallback(text) {
+                    try {
+                        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = type === 'hmac' ? 'hmac_results.txt' : 'sha256_results.txt';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                        return true;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+                // Crash Prevention on Smartphones (If the content exceeds 1.5 million characters, it will be downloaded automatically.)
+                const isMobile = window.innerWidth <= 768 || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+                if (isMobile && textToCopy.length > 1500000) {
+                    if (downloadFallback(textToCopy)) {
+                        triggerUI('copied', '💾 Downloaded!');
+                        return;
+                    }
+                }
+                // Fallback to the Traditional Copy method
                 function fallbackCopy(text) {
                     const textarea = document.createElement('textarea');
                     textarea.value = text;
                     textarea.style.position = 'fixed';
+                    textarea.style.top = '0';
+                    textarea.style.left = '0';
+                    textarea.style.opacity = '0';
                     document.body.appendChild(textarea);
+                    textarea.focus();
                     textarea.select();
+                    try { textarea.setSelectionRange(0, 999999999); } catch (e) {} // iOS quirk
                     let success = false;
                     try { success = document.execCommand('copy'); } catch (e) { success = false; }
                     document.body.removeChild(textarea);
                     return success;
                 }
+                // Try the Modern Copy method -> Fallback to the Traditional Copy method -> Fallback to File Download
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(textToCopy).then(() => {
-                        button.classList.add('copied'); button.textContent = '✓ Copied!';
-                        setTimeout(() => { button.classList.remove('copied'); button.textContent = '📋 Copy'; }, 1500);
+                        triggerUI('copied', '✓ Copied!');
                     }).catch(() => {
                         if (fallbackCopy(textToCopy)) {
-                            button.classList.add('copied'); button.textContent = '✓ Copied!';
-                            setTimeout(() => { button.classList.remove('copied'); button.textContent = '📋 Copy'; }, 1500);
+                            triggerUI('copied', '✓ Copied!');
+                        } else if (downloadFallback(textToCopy)) {
+                            triggerUI('copied', '💾 Downloaded!');
                         } else {
-                            button.classList.add('error'); button.textContent = '✗ Failed!';
-                            setTimeout(() => { button.classList.remove('error'); button.textContent = '📋 Copy'; }, 1200);
+                            triggerUI('error', '✗ Failed!');
                         }
                     });
                 } else {
                     if (fallbackCopy(textToCopy)) {
-                        button.classList.add('copied'); button.textContent = '✓ Copied!';
-                        setTimeout(() => { button.classList.remove('copied'); button.textContent = '📋 Copy'; }, 1500);
+                        triggerUI('copied', '✓ Copied!');
+                    } else if (downloadFallback(textToCopy)) {
+                        triggerUI('copied', '💾 Downloaded!');
                     } else {
-                        button.classList.add('error'); button.textContent = '✗ Failed!';
-                        setTimeout(() => { button.classList.remove('error'); button.textContent = '📋 Copy'; }, 1200);
+                        triggerUI('error', '✗ Failed!');
                     }
                 }
             }
-            inputText.addEventListener('input', debouncedUpdate);
-            hmacKey.addEventListener('input', debouncedUpdate);
+            function updateLineNumbers(textarea, lineDiv) {
+                const lines = textarea.value.split(/\r?\n/).length;
+                const numbers = Array.from({ length: lines }, (_, i) => i + 1).join('\n');
+                lineDiv.textContent = numbers;
+            }
+            function syncScroll(scrollElement, lineDiv) {
+                lineDiv.scrollTop = scrollElement.scrollTop;
+            }
+            // Listeners
+            inputText.addEventListener('input', function() {
+                updateLineNumbers(inputText, inputLineNumbers);
+                debouncedUpdate();
+            });
+            hmacKey.addEventListener('input', function() {
+                updateLineNumbers(hmacKey, keyLineNumbers);
+                debouncedUpdate();
+            });
+            inputText.addEventListener('scroll', () => syncScroll(inputText, inputLineNumbers));
+            hmacKey.addEventListener('scroll', () => syncScroll(hmacKey, keyLineNumbers));
+            hashOutput.addEventListener('scroll', () => syncScroll(hashOutput, hashLineNumbers));
+            hmacOutput.addEventListener('scroll', () => syncScroll(hmacOutput, hmacLineNumbers));
             encodingSelect.addEventListener('change', autoUpdate);
             outputEncodingSelect.addEventListener('change', autoUpdate);
             keyEncodingSelect.addEventListener('change', autoUpdate);
-            clearDataBtn.addEventListener('click', function() { inputText.value = ''; autoUpdate(); });
-            clearKeyBtn.addEventListener('click', function() { hmacKey.value = ''; autoUpdate(); });
-            document.getElementById('copyHashBtn').addEventListener('click', function() { handleCopy(this, hashOutput.textContent); });
-            document.getElementById('copyHmacBtn').addEventListener('click', function() { handleCopy(this, hmacOutput.textContent); });
+            clearDataBtn.addEventListener('click', function() { 
+                inputText.value = ''; 
+                updateLineNumbers(inputText, inputLineNumbers);
+                autoUpdate(); 
+            });
+            clearKeyBtn.addEventListener('click', function() { 
+                hmacKey.value = ''; 
+                updateLineNumbers(hmacKey, keyLineNumbers);
+                autoUpdate(); 
+            });
+            document.getElementById('copyHashBtn').addEventListener('click', function() { 
+                const textToCopy = hashOutput.dataset.raw || hashOutput.textContent;
+                handleCopy(this, textToCopy, 'hash'); 
+            });
+            document.getElementById('copyHmacBtn').addEventListener('click', function() { 
+                const textToCopy = hmacOutput.dataset.raw || hmacOutput.textContent;
+                handleCopy(this, textToCopy, 'hmac'); 
+            });
+            // Initial call
+            updateLineNumbers(inputText, inputLineNumbers);
+            updateLineNumbers(hmacKey, keyLineNumbers);
             autoUpdate();
         })();
     </script>
