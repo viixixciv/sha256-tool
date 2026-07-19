@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SHA-256 & HMAC-SHA256 Tool</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js" 
+        integrity="sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==" 
+        crossorigin="anonymous" 
+        referrerpolicy="no-referrer"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -16,20 +18,41 @@
             margin: 20px auto;
             padding: 16px;
             background: #f0f2f5;
+            transition: background 0.3s, color 0.3s;
         }
         .card {
             background: white;
             border-radius: 16px;
             padding: 30px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s, box-shadow 0.3s;
         }
-        h1 {
-            margin-top: 0;
-            color: #2c3e50;
-            font-weight: 500;
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             border-bottom: 2px solid #3498db;
             padding-bottom: 10px;
+            margin-bottom: 16px;
+        }
+        h1 {
+            margin: 0;
+            color: #2c3e50;
+            font-weight: 500;
             font-size: 28px;
+        }
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            transition: background 0.3s;
+            line-height: 1;
+        }
+        .theme-toggle:hover {
+            background: rgba(0, 0, 0, 0.05);
         }
         .subtitle {
             color: #555;
@@ -48,6 +71,35 @@
             margin-bottom: 4px;
             color: #34495e;
         }
+        .input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 18px;
+            margin-bottom: 4px;
+        }
+        .input-header label {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        .upload-btn {
+            background: #7f8c8d;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+        }
+        .upload-btn:hover {
+            background: #616a6b;
+            transform: scale(1.05);
+        }
         textarea,
         input[type="text"],
         select {
@@ -58,6 +110,8 @@
             font-size: 14px;
             transition: 0.2s;
             font-family: inherit;
+            background: white;
+            color: #000;
         }
         textarea:focus,
         input:focus,
@@ -86,12 +140,6 @@
             background: #2980b9;
             transform: scale(1.02);
         }
-        .btn-secondary {
-            background: #7f8c8d;
-        }
-        .btn-secondary:hover {
-            background: #616a6b;
-        }
         .output-area {
             margin-top: 16px;
             border: 1px solid #e0e6ed;
@@ -99,6 +147,7 @@
             background: #f8f9fc;
             padding: 12px 16px;
             position: relative;
+            transition: background 0.3s, border-color 0.3s;
         }
         .output-area pre {
             margin: 0;
@@ -153,6 +202,7 @@
             margin: 6px 0 10px 0;
             font-size: 13px;
             color: #2c3e50;
+            transition: background 0.3s, color 0.3s;
         }
         .info-box strong {
             color: #1a5276;
@@ -164,6 +214,7 @@
             text-align: center;
             border-top: 1px solid #ecf0f1;
             padding-top: 16px;
+            transition: border-color 0.3s;
         }
         .badge {
             display: inline-block;
@@ -212,8 +263,84 @@
         .clear-btn-inside:active {
             transform: scale(0.9);
         }
-        #hmacBtn {
-            display: none;
+        .hmac-header {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-top: 10px;
+            margin-bottom: 4px;
+        }
+        .hmac-header label {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        .key-encoding-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .key-encoding-label {
+            font-size: 13px;
+            color: #34495e;
+            font-weight: 600;
+        }
+        /* ===== DARK MODE STYLES ===== */
+        body.dark-mode {
+            background: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .card {
+            background: #1e1e1e;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+        body.dark-mode h1, 
+        body.dark-mode h3 {
+            color: #ffffff;
+        }
+        body.dark-mode .subtitle {
+            color: #a0aec0;
+        }
+        body.dark-mode label, 
+        body.dark-mode .key-encoding-label {
+            color: #cbd5e0;
+        }
+        body.dark-mode textarea,
+        body.dark-mode input[type="text"],
+        body.dark-mode select {
+            background: #2d3748;
+            border-color: #4a5568;
+            color: #f7fafc;
+        }
+        body.dark-mode .output-area {
+            background: #171923;
+            border-color: #2d3748;
+        }
+        body.dark-mode .info-box {
+            background: #1a365d;
+            border-left-color: #3182ce;
+            color: #e2e8f0;
+        }
+        body.dark-mode .info-box strong {
+            color: #63b3ed;
+        }
+        body.dark-mode .hmac-section {
+            border-top-color: #4a5568;
+        }
+        body.dark-mode .footer {
+            border-top-color: #2d3748;
+            color: #a0aec0;
+        }
+        body.dark-mode .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        body.dark-mode .clear-btn-inside:hover {
+            background: rgba(231, 76, 60, 0.2);
+        }
+        body.dark-mode .upload-btn {
+            background: #4a5568;
+        }
+        body.dark-mode .upload-btn:hover {
+            background: #2d3748;
         }
         @media (max-width: 700px) {
             body {
@@ -241,37 +368,19 @@
                 font-size: 12px;
                 max-height: 200px;
             }
-            .copy-btn,
-            .clear-btn-inside {
-                padding: 6px 10px;
-                font-size: 14px;
-            }
-            .btn {
-                padding: 10px 16px;
-                font-size: 15px;
-                min-height: 44px;
-                width: 100%;
-            }
-            .btn-group {
+            .hmac-header {
                 flex-direction: column;
-                gap: 10px;
+                align-items: flex-start;
+                gap: 8px;
             }
-            .btn-group .btn {
+            .key-encoding-wrapper {
                 width: 100%;
+                justify-content: flex-start;
             }
-            .info-box {
-                font-size: 12px;
-                padding: 8px 12px;
-            }
-            textarea {
-                font-size: 14px;
-                min-height: 80px;
-            }
-            select {
-                font-size: 14px;
-            }
-            .footer {
-                font-size: 12px;
+            .input-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
             }
         }
         @media (max-width: 480px) {
@@ -282,72 +391,32 @@
             h1 {
                 font-size: 20px;
             }
-            .subtitle {
-                font-size: 13px;
-            }
-            .output-area {
-                padding: 10px 12px;
-            }
-            .output-area pre {
-                font-size: 11px;
-                max-height: 160px;
-            }
-            .copy-btn {
-                font-size: 11px;
-                padding: 4px 8px;
-                top: 6px;
-                right: 6px;
-            }
-            .clear-btn-inside {
-                font-size: 16px;
-                top: 6px;
-                right: 6px;
-            }
-            .btn {
-                font-size: 14px;
-                padding: 8px 12px;
-                min-height: 40px;
-            }
-            .info-box {
-                font-size: 11px;
-                padding: 6px 10px;
-            }
-            textarea {
-                font-size: 13px;
-                min-height: 70px;
-                padding: 8px 10px;
-            }
-            select {
-                font-size: 13px;
-                padding: 8px 10px;
-            }
-            .badge {
-                font-size: 10px;
-                padding: 1px 8px;
-            }
-            .footer {
-                font-size: 11px;
-                padding-top: 12px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="card">
-        <h1>🔐 SHA‑256 & HMAC</h1>
+        <div class="header-container">
+            <h1>🔐 SHA‑256 & HMAC</h1>
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Theme">🌙</button>
+        </div>
         <p class="subtitle">
             Compute SHA-256 and HMAC-SHA256 hashes for multiple inputs in a single operation. Each line is processed independently as a separate input.
             Supports <strong>UTF‑8</strong>, <strong>UTF‑16</strong>, <strong>Hex</strong>, and <strong>Base64</strong> input encodings.
         </p>
         <!-- SHA‑256 SECTION -->
-        <label for="inputText">📝 Input messages <span class="badge">one per line</span></label>
+        <div class="input-header">
+            <label for="inputText">📝 Input messages <span class="badge">one per line</span></label>
+            <input type="file" id="fileInput" accept="text/*, .csv, .json, .xml, .md" style="display: none;">
+            <button class="upload-btn" id="uploadBtn" aria-label="Upload Text File" title="Upload a text file">📂 Upload File</button>
+        </div>
         <div class="textarea-wrapper">
             <textarea id="inputText" placeholder="Enter one or more inputs..."></textarea>
-            <button class="clear-btn-inside" id="clearDataBtn" title="Clear data">🗑</button>
+            <button class="clear-btn-inside" id="clearDataBtn" title="Clear data" aria-label="Clear all input messages">🗑</button>
         </div>
         <div class="info-box">
             💡 <strong>Each line</strong> is processed as one data item. Empty lines and all whitespace (including spaces and tabs) are processed as-is.
-            SHA‑256 hash updates automatically as you type.
+            SHA‑256 hash updates automatically as you type or when a file is uploaded.
         </div>
         <div class="row-select">
             <div>
@@ -375,24 +444,34 @@
             </div>
         </div>
         <div class="output-area" id="hashOutputArea">
-            <button class="copy-btn" id="copyHashBtn">📋 Copy</button>
+            <button class="copy-btn" id="copyHashBtn" aria-label="Copy SHA-256 results">📋 Copy</button>
             <pre id="hashOutput">SHA-256 hashes will appear here.</pre>
         </div>
         <!-- HMAC SECTION -->
         <div class="hmac-section">
             <h3>🔑 HMAC‑SHA256</h3>
-            <label for="hmacKey">🔐 Secret key <span class="badge">one per line or shared key</span></label>
+            <div class="hmac-header">
+                <label for="hmacKey">🔐 Secret key <span class="badge">one per line or shared key</span></label>
+                <div class="key-encoding-wrapper">
+                    <span class="key-encoding-label">Key encoding:</span>
+                    <select id="keyEncodingSelect" style="width: auto; padding: 4px 8px; font-size: 13px;">
+                        <option value="utf8">UTF-8</option>
+                        <option value="utf16">UTF-16 (LE)</option>
+                        <option value="hex">Hex</option>
+                        <option value="base64">Base64</option>
+                    </select>
+                </div>
+            </div>
             <div class="textarea-wrapper">
                 <textarea id="hmacKey" placeholder="Enter one or more secret keys..."></textarea>
-                <button class="clear-btn-inside" id="clearKeyBtn" title="Clear key">🗑</button>
+                <button class="clear-btn-inside" id="clearKeyBtn" title="Clear key" aria-label="Clear secret key">🗑</button>
             </div>
             <div class="info-box">
                 💡 If the number of key lines matches the number of data lines, each key is paired with the corresponding input.
                 If only <strong>one key</strong> is provided, it is used for all inputs. Empty lines are treated as empty keys. HMAC updates automatically.
             </div>
-            <button class="btn" id="hmacBtn" style="display:none;">🔹 Compute HMAC‑SHA256 (manual)</button>
             <div class="output-area" id="hmacOutputArea">
-                <button class="copy-btn" id="copyHmacBtn">📋 Copy</button>
+                <button class="copy-btn" id="copyHmacBtn" aria-label="Copy HMAC results">📋 Copy</button>
                 <pre id="hmacOutput">HMAC-SHA256 values will appear here.</pre>
             </div>
         </div>
@@ -402,15 +481,55 @@
     </div>
     <script>
         (function() {
+            // ===== Theme Management =====
+            const themeToggleBtn = document.getElementById('themeToggle');
+            const body = document.body;
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-mode');
+                themeToggleBtn.textContent = '☀️';
+            } else if (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                body.classList.add('dark-mode');
+                themeToggleBtn.textContent = '☀️';
+            }
+            themeToggleBtn.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                if (body.classList.contains('dark-mode')) {
+                    themeToggleBtn.textContent = '☀️';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    themeToggleBtn.textContent = '🌙';
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+            // ===== Existing Tool Logic =====
             const inputText = document.getElementById('inputText');
             const encodingSelect = document.getElementById('encodingSelect');
             const outputEncodingSelect = document.getElementById('outputEncodingSelect');
             const hashOutput = document.getElementById('hashOutput');
             const hmacKey = document.getElementById('hmacKey');
+            const keyEncodingSelect = document.getElementById('keyEncodingSelect');
             const hmacOutput = document.getElementById('hmacOutput');
             const clearDataBtn = document.getElementById('clearDataBtn');
             const clearKeyBtn = document.getElementById('clearKeyBtn');
-            // ===== Utility functions =====
+            const fileInput = document.getElementById('fileInput');
+            const uploadBtn = document.getElementById('uploadBtn');
+            // ===== File Upload Logic =====
+            uploadBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    inputText.value = event.target.result;
+                    autoUpdate();
+                    fileInput.value = '';
+                };
+                // Reading the file as text for line-by-line processing
+                reader.readAsText(file);
+            });
             function parseData(raw, encoding) {
                 try {
                     switch (encoding) {
@@ -433,16 +552,11 @@
                     return hashObj.toString(CryptoJS.enc.Hex);
                 }
             }
-            function getDataLines() {
-                return inputText.value.split(/\r?\n/);
-            }
-            function getKeyLines() {
-                return hmacKey.value.split(/\r?\n/);
-            }
-            // ===== SHA‑256 =====
+            function getDataLines() { return inputText.value.split(/\r?\n/); }
+            function getKeyLines() { return hmacKey.value.split(/\r?\n/); }
             function computeSHA256() {
                 const lines = getDataLines();
-                if (lines.length === 0) {
+                if (lines.length === 0 || inputText.value.length === 0) {
                     hashOutput.textContent = '(No data)';
                     return;
                 }
@@ -463,19 +577,19 @@
                 if (errors) results.unshift(`⚠️ ${errors} line(s) failed to process.`);
                 hashOutput.textContent = results.join('\n');
             }
-            // ===== HMAC =====
             function computeHMAC() {
                 const dataLines = getDataLines();
                 const keyLines = getKeyLines();
-                if (dataLines.length === 0) {
+                if (dataLines.length === 0 || inputText.value.length === 0) {
                     hmacOutput.textContent = '(No data)';
                     return;
                 }
-                if (keyLines.length === 0) {
+                if (keyLines.length === 0 || hmacKey.value.length === 0) {
                     hmacOutput.textContent = '(Key cannot be empty)';
                     return;
                 }
                 const inputEnc = encodingSelect.value;
+                const keyEnc = keyEncodingSelect.value;
                 const outputEnc = outputEncodingSelect.value;
                 let keys = keyLines;
                 if (keyLines.length === 1) {
@@ -495,14 +609,18 @@
                         errors++;
                         continue;
                     }
-                    const keyWord = CryptoJS.enc.Utf8.parse(keys[i]);
+                    const keyWord = parseData(keys[i], keyEnc);
+                    if (keyWord === null) {
+                        results.push(`[ERROR] Key line ${i+1}: invalid format`);
+                        errors++;
+                        continue;
+                    }
                     const hmac = CryptoJS.HmacSHA256(dataWord, keyWord);
                     results.push(formatHash(hmac, outputEnc));
                 }
                 if (errors) results.unshift(`⚠️ ${errors} line(s) failed to process.`);
                 hmacOutput.textContent = results.join('\n');
             }
-            // ===== Auto update =====
             function autoUpdate() {
                 if (inputText.value.length > 0) {
                     computeSHA256();
@@ -517,117 +635,64 @@
                     hmacOutput.textContent = '(Key cannot be empty)';
                 }
             }
-            // ===== COPY with fallback =====
+            function debounce(func, wait) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            }
+            const debouncedUpdate = debounce(autoUpdate, 250);
             function handleCopy(button, textToCopy) {
-                // Validasi teks
-                if (!textToCopy ||
-                    textToCopy.startsWith('(No data') ||
-                    textToCopy.startsWith('(SHA‑') ||
-                    textToCopy.startsWith('(HMAC') ||
-                    textToCopy.startsWith('(Key cannot')
-                ) {
+                if (!textToCopy || textToCopy.startsWith('(No') || textToCopy.startsWith('(SHA') || textToCopy.startsWith('(HMAC') || textToCopy.startsWith('(Key')) {
                     button.classList.add('error');
                     button.textContent = '⚠️ No data';
-                    setTimeout(() => {
-                        button.classList.remove('error');
-                        button.textContent = '📋 Copy';
-                    }, 1200);
+                    setTimeout(() => { button.classList.remove('error'); button.textContent = '📋 Copy'; }, 1200);
                     return;
                 }
-                // --- Fallback copy ---
                 function fallbackCopy(text) {
-                    // Buat elemen textarea sementara
                     const textarea = document.createElement('textarea');
                     textarea.value = text;
                     textarea.style.position = 'fixed';
-                    textarea.style.left = '-9999px';
-                    textarea.style.top = '-9999px';
                     document.body.appendChild(textarea);
-                    textarea.focus();
                     textarea.select();
                     let success = false;
-                    try {
-                        success = document.execCommand('copy');
-                    } catch (e) {
-                        success = false;
-                    }
+                    try { success = document.execCommand('copy'); } catch (e) { success = false; }
                     document.body.removeChild(textarea);
                     return success;
                 }
-                // Coba Clipboard API (HTTPS / localhost)
                 if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(textToCopy)
-                        .then(() => {
-                            button.classList.add('copied');
-                            button.textContent = '✓ Copied!';
-                            setTimeout(() => {
-                                button.classList.remove('copied');
-                                button.textContent = '📋 Copy';
-                            }, 1500);
-                        })
-                        .catch(() => {
-                            // Jika gagal, coba fallback
-                            const ok = fallbackCopy(textToCopy);
-                            if (ok) {
-                                button.classList.add('copied');
-                                button.textContent = '✓ Copied!';
-                                setTimeout(() => {
-                                    button.classList.remove('copied');
-                                    button.textContent = '📋 Copy';
-                                }, 1500);
-                            } else {
-                                button.classList.add('error');
-                                button.textContent = '✗ Failed!';
-                                setTimeout(() => {
-                                    button.classList.remove('error');
-                                    button.textContent = '📋 Copy';
-                                }, 1200);
-                            }
-                        });
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        button.classList.add('copied'); button.textContent = '✓ Copied!';
+                        setTimeout(() => { button.classList.remove('copied'); button.textContent = '📋 Copy'; }, 1500);
+                    }).catch(() => {
+                        if (fallbackCopy(textToCopy)) {
+                            button.classList.add('copied'); button.textContent = '✓ Copied!';
+                            setTimeout(() => { button.classList.remove('copied'); button.textContent = '📋 Copy'; }, 1500);
+                        } else {
+                            button.classList.add('error'); button.textContent = '✗ Failed!';
+                            setTimeout(() => { button.classList.remove('error'); button.textContent = '📋 Copy'; }, 1200);
+                        }
+                    });
                 } else {
-                    // Clipboard API tidak tersedia, langsung fallback
-                    const ok = fallbackCopy(textToCopy);
-                    if (ok) {
-                        button.classList.add('copied');
-                        button.textContent = '✓ Copied!';
-                        setTimeout(() => {
-                            button.classList.remove('copied');
-                            button.textContent = '📋 Copy';
-                        }, 1500);
+                    if (fallbackCopy(textToCopy)) {
+                        button.classList.add('copied'); button.textContent = '✓ Copied!';
+                        setTimeout(() => { button.classList.remove('copied'); button.textContent = '📋 Copy'; }, 1500);
                     } else {
-                        button.classList.add('error');
-                        button.textContent = '✗ Failed!';
-                        setTimeout(() => {
-                            button.classList.remove('error');
-                            button.textContent = '📋 Copy';
-                        }, 1200);
+                        button.classList.add('error'); button.textContent = '✗ Failed!';
+                        setTimeout(() => { button.classList.remove('error'); button.textContent = '📋 Copy'; }, 1200);
                     }
                 }
             }
-            // ===== Event listeners =====
-            inputText.addEventListener('input', autoUpdate);
-            hmacKey.addEventListener('input', autoUpdate);
+            inputText.addEventListener('input', debouncedUpdate);
+            hmacKey.addEventListener('input', debouncedUpdate);
             encodingSelect.addEventListener('change', autoUpdate);
             outputEncodingSelect.addEventListener('change', autoUpdate);
-            clearDataBtn.addEventListener('click', function() {
-                inputText.value = '';
-                hashOutput.textContent = '(No data)';
-                hmacOutput.textContent = '(No data)';
-            });
-            clearKeyBtn.addEventListener('click', function() {
-                hmacKey.value = '';
-                hmacOutput.textContent = '(Key cannot be empty)';
-            });
-            const copyHashBtn = document.getElementById('copyHashBtn');
-            const copyHmacBtn = document.getElementById('copyHmacBtn');
-            copyHashBtn.addEventListener('click', function() {
-                const text = hashOutput.textContent;
-                handleCopy(this, text);
-            });
-            copyHmacBtn.addEventListener('click', function() {
-                const text = hmacOutput.textContent;
-                handleCopy(this, text);
-            });
+            keyEncodingSelect.addEventListener('change', autoUpdate);
+            clearDataBtn.addEventListener('click', function() { inputText.value = ''; autoUpdate(); });
+            clearKeyBtn.addEventListener('click', function() { hmacKey.value = ''; autoUpdate(); });
+            document.getElementById('copyHashBtn').addEventListener('click', function() { handleCopy(this, hashOutput.textContent); });
+            document.getElementById('copyHmacBtn').addEventListener('click', function() { handleCopy(this, hmacOutput.textContent); });
             autoUpdate();
         })();
     </script>
