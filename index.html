@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHA-256 & HMAC-SHA256 Tool</title>
+    <title>SHA-256 & HMAC-SHA256 TOOL</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔐</text></svg>">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js" 
         integrity="sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==" 
         crossorigin="anonymous" 
@@ -65,6 +66,7 @@
             margin: 20px 0 10px 0;
         }
         label {
+            font-size: 15px;
             font-weight: 600;
             display: block;
             margin-top: 18px;
@@ -86,9 +88,9 @@
             background: #7f8c8d;
             color: white;
             border: none;
-            padding: 4px 12px;
+            padding: 6px 12px;
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 14px;
             cursor: pointer;
             transition: background 0.2s, transform 0.2s;
             display: inline-flex;
@@ -280,7 +282,7 @@
             gap: 8px;
         }
         .key-encoding-label {
-            font-size: 13px;
+            font-size: 14px;
             color: #34495e;
             font-weight: 600;
         }
@@ -424,6 +426,7 @@
                 <select id="encodingSelect">
                     <option value="utf8">UTF‑8</option>
                     <option value="utf16">UTF‑16 (LE)</option>
+                    <option value="utf16be">UTF‑16 (BE)</option>
                     <option value="hex">Hex</option>
                     <option value="base64">Base64</option>
                 </select>
@@ -454,9 +457,10 @@
                 <label for="hmacKey">🔐 Secret key <span class="badge">one per line or shared key</span></label>
                 <div class="key-encoding-wrapper">
                     <span class="key-encoding-label">Key encoding:</span>
-                    <select id="keyEncodingSelect" style="width: auto; padding: 4px 8px; font-size: 13px;">
+                    <select id="keyEncodingSelect" style="width: auto; padding: 4px 8px; font-size: 14px;">
                         <option value="utf8">UTF-8</option>
                         <option value="utf16">UTF-16 (LE)</option>
+                        <option value="utf16be">UTF-16 (BE)</option>
                         <option value="hex">Hex</option>
                         <option value="base64">Base64</option>
                     </select>
@@ -534,7 +538,8 @@
                 try {
                     switch (encoding) {
                         case 'utf8': return CryptoJS.enc.Utf8.parse(raw);
-                        case 'utf16': return CryptoJS.enc.Utf16.parse(raw);
+                        case 'utf16': return CryptoJS.enc.Utf16LE.parse(raw);
+                        case 'utf16be': return CryptoJS.enc.Utf16.parse(raw);
                         case 'hex': return CryptoJS.enc.Hex.parse(raw);
                         case 'base64': return CryptoJS.enc.Base64.parse(raw);
                         default: return CryptoJS.enc.Utf8.parse(raw);
